@@ -66,3 +66,13 @@
             );
         });
     });
+
+    $app->group('/admin/',function() {
+        $this->get('test', function($req, $res, $args){
+            $um = new UserModel();
+            return $res->getBody()
+                ->write(
+                    $args['id']
+                );
+        });
+    }
