@@ -1,21 +1,11 @@
 <?php
-    use App\Model\UserModel;
+    use App\Model\EstudianteModel;
 
     #-- Ruta: Perfil Usuario/Cliente
-    $app->group('/user/', function() {
+    $app->group('/estudiante/', function() {
         
-        $this->get('test/{id}', function($req, $res, $args){
-            $um = new UserModel();
-
-            return $res->getBody()
-                ->write(
-                    $args['id']
-                );
-
-        });
-
         $this->get('Lista', function($req, $res, $args){
-            $um = new UserModel();
+            $um = new EstudianteModel();
 
             return $res
             ->withHeader('Content-type','application/json')
@@ -28,7 +18,7 @@
         });
         
         $this->get('get/{id}', function($req, $res, $args){
-            $um = new UserModel();
+            $um = new EstudianteModel();
             return $res
             ->withHeader('Content-type', 'application/json')
             ->getBody()
@@ -41,7 +31,7 @@
 
         $this->post('save', function($req, $res){
             // $data = $req->getParsedBody(); retornará todo los valores que nos hayan enviado.
-            $um = new UserModel();
+            $um = new EstudianteModel();
 
             return $res
             ->withHeader('Content-type','application/json')
@@ -54,7 +44,7 @@
         });
 
         $this->post('delete/{id}', function($req, $res, $args){
-            $um = new UserModel();
+            $um = new EstudianteModel();
         
             return $res
             ->withHeader('Content-type', 'application/json')
@@ -66,3 +56,4 @@
             );
         });
     });
+

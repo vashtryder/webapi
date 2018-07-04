@@ -5,10 +5,10 @@
     use App\Lib\Database;
     use App\Lib\Response;
 
-    class UserModel
+    class TemaUser
     {
         private $db;
-        private $table = 'tb_login';
+        private $table = 'tb_tema';
         private $response;
         
         public function __CONSTRUCT()
@@ -41,7 +41,7 @@
             try{    
                 $result = array();
 
-                $stm = $this->db->prepare("SELECT * FROM $this->table WHERE id = ? ");
+                $stm = $this->db->prepare("SELECT * FROM $this->table WHERE idTema = ? ");
                 $stm->execute(array($id));
 
                 $this->response->setResponse(true);
@@ -58,7 +58,7 @@
         {
             try 
             {
-                $stm = $this->db->prepare("DELETE FROM $this->table WHERE id = ?");			          
+                $stm = $this->db->prepare("DELETE FROM $this->table WHERE idTema = ?");			          
                 $stm->execute(array($id));
             
                 $this->response->setResponse(true);
@@ -73,27 +73,54 @@
         {
             try{
                 if (isset($data['id'])) {
-                    $sql = "UPDATE $this->table SET
-                            pass = ?
-                            WHERE id = ?";
+                    if ($data['rason'] == 1) {
+                        $sql = "UPDATE tb_tema SET
+                            idCurso  = ?,
+                            idModulo = ?,
+                            nombre   = ?,
+                            archivo  = ?,
+                            link     = ?
+                        WHERE idTema= ?";
+                    } else {
+                        $sql = "UPDATE tb_tema SET
+                            idCurso  = ?,
+                            idModulo = ?,
+                            nombre   = ?
+                        WHERE idTema= ?";
+                    }
 
                     $this->db->prepare($sql)
                         ->execute(
-                            array(
-                                $data['pass'],
-                                $data['id']
-                            )
+                            if ($data['rason'] == 1) {
+                                array(
+                                    $data['idc'],
+                                    $data['idm'],
+                                    $data['nombre'],
+                                    $data['archivo'],
+                                    $data['link'],
+                                    $data['id']
+                                )
+                            } else{
+                                array(
+                                    $data['idc'],
+                                    $data['idm'],
+                                    $data['nombre']
+                                    $data['id']
+                                )
+                            }
                         );
                 } else {
-                    $sql = "INSERT INTO $this->table (id,user, pass, active) 
-                    VALUES (?,?,?)";
+                    $sql = "INSERT INTO $this->table (idTema, idCurso, idModulo, nombre, archivo, link) 
+                    VALUES (?,?,?,?,?,?)";
                     $this->db->prepare($sql)
                         ->execute(
                             array(
                                 $data['ida'],
-                                $data['user'],
-                                $data['pass'],
-                                $data['active']
+                                $data['idc'],
+                                $data['idm'],
+                                $data['nombre'],
+                                $data['archivo'],
+                                $data['link']
                             )
                         );
                 }

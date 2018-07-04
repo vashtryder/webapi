@@ -1,14 +1,15 @@
 <?php
+    <?php
     namespace App\Model;
 
     use PDO;
     use App\Lib\Database;
     use App\Lib\Response;
 
-    class UserModel
+    class UnidadModel
     {
         private $db;
-        private $table = 'tb_login';
+        private $table = 'tb_unidad';
         private $response;
         
         public function __CONSTRUCT()
@@ -58,7 +59,7 @@
         {
             try 
             {
-                $stm = $this->db->prepare("DELETE FROM $this->table WHERE id = ?");			          
+                $stm = $this->db->prepare("DELETE FROM $this->table WHERE idUnidad = ?");			          
                 $stm->execute(array($id));
             
                 $this->response->setResponse(true);
@@ -73,27 +74,28 @@
         {
             try{
                 if (isset($data['id'])) {
-                    $sql = "UPDATE $this->table SET
-                            pass = ?
-                            WHERE id = ?";
+                    $sql ="UPDATE $this->table SET
+                    nombreUnidad   = ?,
+                    abrevUnidad    = ?
+                    WHERE idUnidad = ?";
 
                     $this->db->prepare($sql)
                         ->execute(
                             array(
-                                $data['pass'],
+                                $data['nombre'],
+                                $data['abrev'],
                                 $data['id']
                             )
                         );
                 } else {
-                    $sql = "INSERT INTO $this->table (id,user, pass, active) 
+                    $sql = "INSERT INTO $this->table (idUnidad, nombreUnidad, abrevUnidad)
                     VALUES (?,?,?)";
                     $this->db->prepare($sql)
                         ->execute(
                             array(
                                 $data['ida'],
-                                $data['user'],
-                                $data['pass'],
-                                $data['active']
+                                $data['nombre'],
+                                $data['abrv']
                             )
                         );
                 }

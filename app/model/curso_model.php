@@ -5,10 +5,10 @@
     use App\Lib\Database;
     use App\Lib\Response;
 
-    class UserModel
+    class CursoModel
     {
         private $db;
-        private $table = 'tb_login';
+        private $table = 'tb_curso';
         private $response;
         
         public function __CONSTRUCT()
@@ -41,7 +41,7 @@
             try{    
                 $result = array();
 
-                $stm = $this->db->prepare("SELECT * FROM $this->table WHERE id = ? ");
+                $stm = $this->db->prepare("SELECT * FROM $this->table WHERE id = ?");
                 $stm->execute(array($id));
 
                 $this->response->setResponse(true);
@@ -58,7 +58,7 @@
         {
             try 
             {
-                $stm = $this->db->prepare("DELETE FROM $this->table WHERE id = ?");			          
+                $stm = $this->db->prepare("DELETE FROM $this->table WHERE idCurso = ?");			          
                 $stm->execute(array($id));
             
                 $this->response->setResponse(true);
@@ -74,26 +74,25 @@
             try{
                 if (isset($data['id'])) {
                     $sql = "UPDATE $this->table SET
-                            pass = ?
-                            WHERE id = ?";
+                        nombre = ?
+                    WHERE 
+                        idCurso  = ?";
 
                     $this->db->prepare($sql)
                         ->execute(
                             array(
-                                $data['pass'],
+                                $data['nombre'],
                                 $data['id']
                             )
                         );
                 } else {
-                    $sql = "INSERT INTO $this->table (id,user, pass, active) 
-                    VALUES (?,?,?)";
+                    $sql = "INSERT INTO $this->table (idCurso, nombre)
+                    VALUES (?,?)";
                     $this->db->prepare($sql)
                         ->execute(
                             array(
                                 $data['ida'],
-                                $data['user'],
-                                $data['pass'],
-                                $data['active']
+                                $data['nombre']
                             )
                         );
                 }
@@ -107,3 +106,4 @@
         }
 
     }
+

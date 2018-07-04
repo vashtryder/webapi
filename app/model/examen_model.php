@@ -5,10 +5,10 @@
     use App\Lib\Database;
     use App\Lib\Response;
 
-    class UserModel
+    class ExamenModel
     {
         private $db;
-        private $table = 'tb_login';
+        private $table = 'tb_examen';
         private $response;
         
         public function __CONSTRUCT()

@@ -5,10 +5,10 @@
     use App\Lib\Database;
     use App\Lib\Response;
 
-    class UserModel
+    class ModuloModel
     {
         private $db;
-        private $table = 'tb_login';
+        private $table = 'tb_modulo';
         private $response;
         
         public function __CONSTRUCT()
@@ -41,7 +41,7 @@
             try{    
                 $result = array();
 
-                $stm = $this->db->prepare("SELECT * FROM $this->table WHERE id = ? ");
+                $stm = $this->db->prepare("SELECT * FROM $this->table WHERE idModulo = ? ");
                 $stm->execute(array($id));
 
                 $this->response->setResponse(true);
@@ -58,7 +58,7 @@
         {
             try 
             {
-                $stm = $this->db->prepare("DELETE FROM $this->table WHERE id = ?");			          
+                $stm = $this->db->prepare("DELETE FROM $this->table WHERE idModulo = ?");			          
                 $stm->execute(array($id));
             
                 $this->response->setResponse(true);
@@ -74,26 +74,30 @@
             try{
                 if (isset($data['id'])) {
                     $sql = "UPDATE $this->table SET
-                            pass = ?
-                            WHERE id = ?";
+                    idCurso        = ?,
+                    idUnidad       = ?,
+                    nombre         = ?
+                    WHERE idModulo = ?";
 
                     $this->db->prepare($sql)
                         ->execute(
                             array(
-                                $data['pass'],
+                                $data['idc'],
+                                $data['idu'],
+                                $data['nombre'],
                                 $data['id']
                             )
                         );
                 } else {
-                    $sql = "INSERT INTO $this->table (id,user, pass, active) 
-                    VALUES (?,?,?)";
+                    $sql = "INSERT INTO $this->table(idModulo, idUnidad, idCurso, nombre)
+                    VALUES (?,?,?,?)";
                     $this->db->prepare($sql)
                         ->execute(
                             array(
                                 $data['ida'],
-                                $data['user'],
-                                $data['pass'],
-                                $data['active']
+                                $data['idu'],
+                                $data['idc'],
+                                $data['nombre']
                             )
                         );
                 }
