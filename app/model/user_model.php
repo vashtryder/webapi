@@ -106,4 +106,28 @@
             
         }
 
+        public function GetUser($data)
+        {
+            try{
+                $result = array();
+
+                $stm = $this->db->prepare("SELECT * FROM $this->table WHERE user = ? and pass = ?");
+                $stm->execute(
+                    array(
+                        $data['user'],
+                        $data['pass']
+                    )
+                );
+
+                $this->response->setResponse(true);
+                $this->response->result = $stm->fetchAll();
+
+                return $this->response;
+
+            } catch(Exception $e){
+                $this->response->setResponse(false, $e->getMessage());
+                $this->response;
+            }
+        }
+
     }

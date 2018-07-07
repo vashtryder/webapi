@@ -5,10 +5,10 @@
     use App\Lib\Database;
     use App\Lib\Response;
 
-    class UnidadModel
+    class RespuestaModel
     {
         private $db;
-        private $table = 'tb_unidad';
+        private $table = 'tb_respuesta';
         private $response;
         
         public function __CONSTRUCT()
@@ -41,7 +41,7 @@
             try{    
                 $result = array();
 
-                $stm = $this->db->prepare("SELECT * FROM $this->table WHERE idUnidad = ? ");
+                $stm = $this->db->prepare("SELECT * FROM $this->table WHERE idRespuesta  = ? ");
                 $stm->execute(array($id));
 
                 $this->response->setResponse(true);
@@ -58,7 +58,7 @@
         {
             try 
             {
-                $stm = $this->db->prepare("DELETE FROM $this->table WHERE idUnidad = ?");			          
+                $stm = $this->db->prepare("DELETE FROM $this->table WHERE idRespuesta  = ?");			          
                 $stm->execute(array($id));
             
                 $this->response->setResponse(true);
@@ -73,28 +73,58 @@
         {
             try{
                 if (isset($data['id'])) {
-                    $sql ="UPDATE $this->table SET
-                    nombreUnidad   = ?,
-                    abrevUnidad    = ?
-                    WHERE idUnidad = ?";
+                    if ($data['rason'] == 1) {
+                        $sql = "UPDATE $this->table SET
+                            idCurso  = ?,
+                            idModulo = ?,
+                            nombre   = ?,
+                            archivo  = ?,
+                            link     = ?
+                        WHERE idRespuesta = ?";
+                    } else {
+                        $sql = "UPDATE $this->table SET
+                            idCurso  = ?,
+                            idModulo = ?,
+                            nombre   = ?
+                        WHERE idRespuesta = ?";
+                    }
+
+                    if ($data['rason'] == 1) {
+                        $arrayData = array(
+                            $data['idc'],
+                            $data['idm'],
+                            $data['nombre'],
+                            $data['archivo'],
+                            $data['link'],
+                            $data['id']
+                        );
+                    } else{
+                        $arrayData = array(
+                            $data['idc'],
+                            $data['idm'],
+                            $data['nombre'],
+                            $data['id']
+                        );
+                    }
 
                     $this->db->prepare($sql)
                         ->execute(
                             array(
-                                $data['nombre'],
-                                $data['abrev'],
-                                $data['id']
+                                $arrayData
                             )
                         );
                 } else {
-                    $sql = "INSERT INTO $this->table (idUnidad, nombreUnidad, abrevUnidad)
-                    VALUES (?,?,?)";
+                    $sql = "INSERT INTO $this->table (idRespuesta , idCurso, idModulo, nombre, archivo, link) 
+                    VALUES (?,?,?,?,?,?)";
                     $this->db->prepare($sql)
                         ->execute(
                             array(
                                 $data['ida'],
+                                $data['idc'],
+                                $data['idm'],
                                 $data['nombre'],
-                                $data['abrv']
+                                $data['archivo'],
+                                $data['link']
                             )
                         );
                 }

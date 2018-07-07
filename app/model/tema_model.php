@@ -5,7 +5,7 @@
     use App\Lib\Database;
     use App\Lib\Response;
 
-    class TemaUser
+    class TemaModel
     {
         private $db;
         private $table = 'tb_tema';
@@ -89,25 +89,29 @@
                         WHERE idTema= ?";
                     }
 
+                    if ($data['rason'] == 1) {
+                        $arrayData = array(
+                            $data['idc'],
+                            $data['idm'],
+                            $data['nombre'],
+                            $data['archivo'],
+                            $data['link'],
+                            $data['id']
+                        );
+                    } else{
+                        $arrayData = array(
+                            $data['idc'],
+                            $data['idm'],
+                            $data['nombre'],
+                            $data['id']
+                        );
+                    }
+
                     $this->db->prepare($sql)
                         ->execute(
-                            if ($data['rason'] == 1) {
-                                array(
-                                    $data['idc'],
-                                    $data['idm'],
-                                    $data['nombre'],
-                                    $data['archivo'],
-                                    $data['link'],
-                                    $data['id']
-                                )
-                            } else{
-                                array(
-                                    $data['idc'],
-                                    $data['idm'],
-                                    $data['nombre']
-                                    $data['id']
-                                )
-                            }
+                            array(
+
+                            )
                         );
                 } else {
                     $sql = "INSERT INTO $this->table (idTema, idCurso, idModulo, nombre, archivo, link) 
