@@ -2,8 +2,8 @@
 use App\Model\UnidadModel;
 
 #-- Ruta: Perfil Usuario/Cliente
-$app->group('/admin/unidad/', function() {
-    
+$app->group('/server/unidad/', function() {
+
     $this->get('Lista', function($req, $res, $args){
         $um = new UnidadModel();
 
@@ -16,7 +16,7 @@ $app->group('/admin/unidad/', function() {
             )
         );
     });
-    
+
     $this->get('get/{id}', function($req, $res, $args){
         $um = new UnidadModel();
         return $res
@@ -30,22 +30,22 @@ $app->group('/admin/unidad/', function() {
     });
 
     $this->post('save', function($req, $res){
-        // $data = $req->getParsedBody(); retornará todo los valores que nos hayan enviado.
-        $um = new UnidadModel();
 
+        $um = new UnidadModel();
+        $data = $req->getParsedBody(); //retornará todo los valores que nos hayan enviado.
         return $res
         ->withHeader('Content-type','application/json')
         ->getBody()
         ->write(
             json_encode(
-                $um->GetAll()
+                $um->InsertOrUpdate($data)
             )
          );
     });
 
     $this->post('delete/{id}', function($req, $res, $args){
         $um = new UnidadModel();
-    
+
         return $res
         ->withHeader('Content-type', 'application/json')
         ->getBody()

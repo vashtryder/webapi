@@ -29,5 +29,12 @@ require __DIR__ . '/../src/routes.php';
 // Register my App
 require __DIR__ . '/../app/app_loader.php';
 
+$corsOptions = array(
+    "origin" => "*",
+    "exposeHeaders" => array("Content-Type", "X-Requested-With", "X-authentication", "X-client"),
+    "allowMethods" => array('GET', 'POST', 'PUT', 'DELETE', 'OPTIONS')
+);
+$cors = new \CorsSlim\CorsSlim($corsOptions);
+
 // Run app
 $app->run();

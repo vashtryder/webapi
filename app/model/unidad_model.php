@@ -72,7 +72,7 @@
         public function InsertOrUpdate($data)
         {
             try{
-                if (isset($data['id'])) {
+                if (isset($data['idUnidad'])) {
                     $sql ="UPDATE $this->table SET
                     nombreUnidad   = ?,
                     abrevUnidad    = ?
@@ -81,9 +81,9 @@
                     $this->db->prepare($sql)
                         ->execute(
                             array(
-                                $data['nombre'],
-                                $data['abrev'],
-                                $data['id']
+                                $data['nombreUnidad'],
+                                $data['abrevUnidad'],
+                                $data['idUnidad']
                             )
                         );
                 } else {
@@ -93,8 +93,8 @@
                         ->execute(
                             array(
                                 $data['ida'],
-                                $data['nombre'],
-                                $data['abrv']
+                                $data['nombreUnidad'],
+                                $data['abrevUnidad']
                             )
                         );
                 }
