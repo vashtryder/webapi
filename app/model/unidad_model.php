@@ -10,7 +10,7 @@
         private $db;
         private $table = 'tb_unidad';
         private $response;
-        
+
         public function __CONSTRUCT()
         {
             $this->db = Database::StartUp();
@@ -38,7 +38,7 @@
 
         public function Get($id)
         {
-            try{    
+            try{
                 $result = array();
 
                 $stm = $this->db->prepare("SELECT * FROM $this->table WHERE idUnidad = ? ");
@@ -46,7 +46,7 @@
 
                 $this->response->setResponse(true);
                 $this->response->result = $stm->fetch();
-                
+
                 return $this->response;
 
             }catch(Exception $e){
@@ -56,14 +56,14 @@
 
         public function Delete($id)
         {
-            try 
+            try
             {
-                $stm = $this->db->prepare("DELETE FROM $this->table WHERE idUnidad = ?");			          
+                $stm = $this->db->prepare("DELETE FROM $this->table WHERE idUnidad = ?");
                 $stm->execute(array($id));
-            
+
                 $this->response->setResponse(true);
                 return $this->response;
-                
+
             } catch (Exception $e) {
                 $this->response->setResponse(false, $e->getMessage());
             }
@@ -87,12 +87,11 @@
                             )
                         );
                 } else {
-                    $sql = "INSERT INTO $this->table (idUnidad, nombreUnidad, abrevUnidad)
-                    VALUES (?,?,?)";
+                    $sql = "INSERT INTO $this->table (nombreUnidad, abrevUnidad)
+                    VALUES (?,?)";
                     $this->db->prepare($sql)
                         ->execute(
                             array(
-                                $data['ida'],
                                 $data['nombreUnidad'],
                                 $data['abrevUnidad']
                             )
@@ -104,7 +103,7 @@
             } catch(Exception $e){
                 $this->response->setResponse(false, $e->getMessage());
             }
-            
+
         }
 
     }

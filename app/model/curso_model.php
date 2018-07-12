@@ -41,7 +41,7 @@
             try{    
                 $result = array();
 
-                $stm = $this->db->prepare("SELECT * FROM $this->table WHERE id = ?");
+                $stm = $this->db->prepare("SELECT * FROM $this->table WHERE idCurso = ?");
                 $stm->execute(array($id));
 
                 $this->response->setResponse(true);
@@ -72,7 +72,7 @@
         public function InsertOrUpdate($data)
         {
             try{
-                if (isset($data['id'])) {
+                if (isset($data['idCurso'])) {
                     $sql = "UPDATE $this->table SET
                         nombre = ?
                     WHERE 
@@ -81,18 +81,17 @@
                     $this->db->prepare($sql)
                         ->execute(
                             array(
-                                $data['nombre'],
-                                $data['id']
+                                $data['nombreCurso'],
+                                $data['idCurso']
                             )
                         );
                 } else {
-                    $sql = "INSERT INTO $this->table (idCurso, nombre)
-                    VALUES (?,?)";
+                    $sql = "INSERT INTO $this->table (nombre)
+                    VALUES (?)";
                     $this->db->prepare($sql)
                         ->execute(
                             array(
-                                $data['ida'],
-                                $data['nombre']
+                                $data['nombreCurso']
                             )
                         );
                 }

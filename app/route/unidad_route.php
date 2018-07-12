@@ -43,7 +43,7 @@ $app->group('/server/unidad/', function() {
          );
     });
 
-    $this->post('delete/{id}', function($req, $res, $args){
+    $this->get('delete/{id}', function($req, $res, $args){
         $um = new UnidadModel();
 
         return $res
