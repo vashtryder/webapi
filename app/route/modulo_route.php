@@ -2,7 +2,7 @@
 use App\Model\ModuloModel;
 
 #-- Ruta: Perfil Usuario/Cliente
-$app->group('/admin/modulo/', function() {
+$app->group('/server/modulo/', function() {
     
     $this->get('Lista', function($req, $res, $args){
         $um = new ModuloModel();
@@ -30,7 +30,7 @@ $app->group('/admin/modulo/', function() {
     });
 
     $this->post('save', function($req, $res){
-        // $data = $req->getParsedBody(); retornará todo los valores que nos hayan enviado.
+        $data = $req->getParsedBody(); //retornará todo los valores que nos hayan enviado.
         $um = new ModuloModel();
 
         return $res
@@ -38,12 +38,12 @@ $app->group('/admin/modulo/', function() {
         ->getBody()
         ->write(
             json_encode(
-                $um->GetAll()
+                $um->InsertOrUpdate($data)
             )
          );
     });
 
-    $this->post('delete/{id}', function($req, $res, $args){
+    $this->get('delete/{id}', function($req, $res, $args){
         $um = new ModuloModel();
     
         return $res
@@ -52,6 +52,19 @@ $app->group('/admin/modulo/', function() {
         ->write(
             json_encode(
                 $um->Delete($args['id'])
+            )
+        );
+    });
+
+    $this->get('vista', function($req, $res, $args){
+        $um = new ModuloModel();
+
+        return $res
+        ->withHeader('Content-type','application/json')
+        ->getBody()
+        ->write(
+            json_encode(
+                $um->GetVista()
             )
         );
     });

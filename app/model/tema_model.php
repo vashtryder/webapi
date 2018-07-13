@@ -9,6 +9,7 @@
     {
         private $db;
         private $table = 'tb_tema';
+        private $view = 'vb_tema';
         private $response;
         
         public function __CONSTRUCT()
@@ -33,6 +34,42 @@
             } catch(Exception $e){
                 $this->response->setResponse(false, $e->getMessage());
                 $this->response;
+            }
+        }
+
+        public function GetVista()
+        {
+            try{    
+                $result = array();
+
+                $stm = $this->db->prepare("SELECT * FROM $this->view");
+                $stm->execute();
+
+                $this->response->setResponse(true);
+                $this->response->result = $stm->fetchAll();
+                
+                return $this->response;
+
+            }catch(Exception $e){
+                $this->response->setResponse(false,$e->getMessage());
+            }
+        }
+
+        public function Get($id)
+        {
+            try{    
+                $result = array();
+
+                $stm = $this->db->prepare("SELECT * FROM $this->table WHERE idTema = ? ");
+                $stm->execute(array($id));
+
+                $this->response->setResponse(true);
+                $this->response->result = $stm->fetch();
+                
+                return $this->response;
+
+            }catch(Exception $e){
+                $this->response->setResponse(false,$e->getMessage());
             }
         }
 

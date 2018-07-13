@@ -9,6 +9,7 @@
     {
         private $db;
         private $table = 'tb_modulo';
+        private $view = 'vb_modulo';
         private $response;
         
         public function __CONSTRUCT()
@@ -23,6 +24,25 @@
                 $result = array();
 
                 $stm = $this->db->prepare("SELECT * FROM $this->table");
+                $stm->execute();
+
+                $this->response->setResponse(true);
+                $this->response->result = $stm->fetchAll();
+
+                return $this->response;
+
+            } catch(Exception $e){
+                $this->response->setResponse(false, $e->getMessage());
+                $this->response;
+            }
+        }
+
+        public function GetVista()
+        {
+            try{
+                $result = array();
+
+                $stm = $this->db->prepare("SELECT * FROM $this->view");
                 $stm->execute();
 
                 $this->response->setResponse(true);
@@ -72,7 +92,7 @@
         public function InsertOrUpdate($data)
         {
             try{
-                if (isset($data['id'])) {
+                if (isset($data['idModulo'])) {
                     $sql = "UPDATE $this->table SET
                     idCurso        = ?,
                     idUnidad       = ?,
@@ -82,25 +102,27 @@
                     $this->db->prepare($sql)
                         ->execute(
                             array(
-                                $data['idc'],
-                                $data['idu'],
-                                $data['nombre'],
-                                $data['id']
+                                $data['idCurso'],
+                                $data['idUnidad'],
+                                $data['nombreModulo'],
+                                $data['idModulo']
+
                             )
                         );
                 } else {
-                    $sql = "INSERT INTO $this->table(idModulo, idUnidad, idCurso, nombre)
-                    VALUES (?,?,?,?)";
+                    $sql = "INSERT INTO $this->table(idUnidad, idCurso, nombre)
+                    VALUES (?,?,?)";
                     $this->db->prepare($sql)
                         ->execute(
                             array(
-                                $data['ida'],
-                                $data['idu'],
-                                $data['idc'],
-                                $data['nombre']
+                                $data['idUnidad'],
+                                $data['idCurso'],
+                                $data['nombreModulo']
                             )
                         );
                 }
+
+                
 
                 $this->response->setResponse(true);
                 return $this->response;

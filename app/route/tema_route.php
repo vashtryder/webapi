@@ -2,7 +2,7 @@
 use App\Model\TemaModel;
 
 #-- Ruta: Perfil Usuario/Cliente
-$app->group('/admin/tema/', function() {
+$app->group('/server/tema/', function() {
     
     $this->get('Lista', function($req, $res, $args){
         $um = new TemaModel();
@@ -13,6 +13,18 @@ $app->group('/admin/tema/', function() {
         ->write(
             json_encode(
                 $um->GetAll()
+            )
+        );
+    });
+
+    $this->get('vista', function($req, $res, $args){
+        $um = new TemaModel();
+        return $res
+        ->withHeader('Content-type','application/json')
+        ->getBody()
+        ->write(
+            json_encode(
+                $um->GetVista()
             )
         );
     });
@@ -43,7 +55,7 @@ $app->group('/admin/tema/', function() {
          );
     });
 
-    $this->post('delete/{id}', function($req, $res, $args){
+    $this->get('delete/{id}', function($req, $res, $args){
         $um = new TemaModel();
     
         return $res
