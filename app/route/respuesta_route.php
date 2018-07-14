@@ -16,6 +16,18 @@ $app->group('/admin/respuesta/', function() {
             )
         );
     });
+
+    $this->get('vista', function($req, $res, $args){
+        $um = new RespuestaModel();
+        return $res
+        ->withHeader('Content-type','application/json')
+        ->getBody()
+        ->write(
+            json_encode(
+                $um->GetVista()
+            )
+        );
+    });
     
     $this->get('get/{id}', function($req, $res, $args){
         $um = new RespuestaModel();

@@ -10,6 +10,7 @@
         private $db;
         private $table = 'tb_modulo';
         private $view = 'vb_modulo';
+        private $view1 = 'vb_modulo_curso';
         private $response;
         
         public function __CONSTRUCT()
@@ -34,6 +35,24 @@
             } catch(Exception $e){
                 $this->response->setResponse(false, $e->getMessage());
                 $this->response;
+            }
+        }
+
+        public function GetData($id)
+        {
+            try{    
+                $result = array();
+
+                $stm = $this->db->prepare("SELECT * FROM $this->view1 WHERE idCurso = ?");
+                $stm->execute(array($id));
+
+                $this->response->setResponse(true);
+                $this->response->result = $stm->fetchAll();
+                
+                return $this->response;
+
+            }catch(Exception $e){
+                $this->response->setResponse(false,$e->getMessage());
             }
         }
 

@@ -73,24 +73,6 @@
             }
         }
 
-        public function Get($id)
-        {
-            try{    
-                $result = array();
-
-                $stm = $this->db->prepare("SELECT * FROM $this->table WHERE idTema = ? ");
-                $stm->execute(array($id));
-
-                $this->response->setResponse(true);
-                $this->response->result = $stm->fetch();
-                
-                return $this->response;
-
-            }catch(Exception $e){
-                $this->response->setResponse(false,$e->getMessage());
-            }
-        }
-
         public function Delete($id)
         {
             try 

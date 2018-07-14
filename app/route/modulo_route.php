@@ -6,7 +6,6 @@ $app->group('/server/modulo/', function() {
     
     $this->get('Lista', function($req, $res, $args){
         $um = new ModuloModel();
-
         return $res
         ->withHeader('Content-type','application/json')
         ->getBody()
@@ -17,6 +16,18 @@ $app->group('/server/modulo/', function() {
         );
     });
     
+    $this->get('getdata/{id}', function($req, $res, $args){
+        $um = new ModuloModel();
+        return $res
+        ->withHeader('Content-type', 'application/json')
+        ->getBody()
+        ->write(
+            json_encode(
+                $um->GetData($args['id'])
+            )
+        );
+    });
+
     $this->get('get/{id}', function($req, $res, $args){
         $um = new ModuloModel();
         return $res

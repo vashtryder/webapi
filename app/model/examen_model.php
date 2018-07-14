@@ -9,6 +9,7 @@
     {
         private $db;
         private $table = 'tb_examen';
+        private $view = 'vb_examen';
         private $response;
         
         public function __CONSTRUCT()
@@ -33,6 +34,24 @@
             } catch(Exception $e){
                 $this->response->setResponse(false, $e->getMessage());
                 $this->response;
+            }
+        }
+
+        public function GetVista()
+        {
+            try{    
+                $result = array();
+
+                $stm = $this->db->prepare("SELECT * FROM $this->view");
+                $stm->execute();
+
+                $this->response->setResponse(true);
+                $this->response->result = $stm->fetchAll();
+                
+                return $this->response;
+
+            }catch(Exception $e){
+                $this->response->setResponse(false,$e->getMessage());
             }
         }
 
