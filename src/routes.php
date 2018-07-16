@@ -2,7 +2,7 @@
 
 use Slim\Http\Request;
 use Slim\Http\Response;
-
+use Slim\Http\UploadedFile;
 // Routes
 
 $app->get('/[{name}]', function (Request $request, Response $response, array $args) {

@@ -11,6 +11,8 @@ if (PHP_SAPI == 'cli-server') {
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use Slim\Http\UploadedFile;
+
 session_start();
 
 // Instantiate the app
@@ -25,6 +27,9 @@ require __DIR__ . '/../src/middleware.php';
 
 // Register routes
 require __DIR__ . '/../src/routes.php';
+
+$container = $app->getContainer();
+$container['upload_directory'] = __DIR__ . '\\uploads';
 
 // Register my App
 require __DIR__ . '/../app/app_loader.php';

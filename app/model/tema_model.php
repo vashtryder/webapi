@@ -88,62 +88,61 @@
             }
         }
 
-        public function InsertOrUpdate($data)
+        public function InsertOrUpdate($data , $file, $url)
         {
             try{
-                if (isset($data['id'])) {
-                    if ($data['rason'] == 1) {
-                        $sql = "UPDATE tb_tema SET
+                if (isset($data['idTema'])) {
+                    
+                    if (!empty($file)) {
+                        $sql = "UPDATE $this->table SET
                             idCurso  = ?,
                             idModulo = ?,
                             nombre   = ?,
                             archivo  = ?,
                             link     = ?
-                        WHERE idTema= ?";
+                        WHERE idTema = ?";
                     } else {
-                        $sql = "UPDATE tb_tema SET
+                        $sql = "UPDATE $this->table SET
                             idCurso  = ?,
                             idModulo = ?,
                             nombre   = ?
-                        WHERE idTema= ?";
+                        WHERE idTema = ?";
                     }
 
-                    if ($data['rason'] == 1) {
-                        $arrayData = array(
-                            $data['idc'],
-                            $data['idm'],
+                    if (!empty($file)) {
+                        $arrayData =  array(
+                            $data['idCurso'],
+                            $data['idModulo'],
                             $data['nombre'],
-                            $data['archivo'],
-                            $data['link'],
-                            $data['id']
+                            $file,
+                            $url,
+                            $data['idTema']
                         );
-                    } else{
+                    } else {
                         $arrayData = array(
-                            $data['idc'],
-                            $data['idm'],
+                            $data['idCurso'],
+                            $data['idModulo'],
                             $data['nombre'],
-                            $data['id']
+                            $data['idTema']
                         );
-                    }
+                    };
 
                     $this->db->prepare($sql)
                         ->execute(
-                            array(
+                            array($arrayData)
+                    );
 
-                            )
-                        );
                 } else {
-                    $sql = "INSERT INTO $this->table (idTema, idCurso, idModulo, nombre, archivo, link) 
-                    VALUES (?,?,?,?,?,?)";
+                    $sql = "INSERT INTO $this->table ( idCurso, idModulo, nombre, archivo, link) 
+                    VALUES (?,?,?,?,?)";
                     $this->db->prepare($sql)
                         ->execute(
                             array(
-                                $data['ida'],
-                                $data['idc'],
-                                $data['idm'],
-                                $data['nombre'],
-                                $data['archivo'],
-                                $data['link']
+                                $data['idCurso'],
+                                $data['idModulo'],
+                                $data['nombreTema'],
+                                $file,
+                                $url
                             )
                         );
                 }
@@ -155,5 +154,4 @@
             }
             
         }
-
     }
