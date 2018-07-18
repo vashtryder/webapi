@@ -88,11 +88,11 @@
             }
         }
 
-        public function InsertOrUpdate($data)
+        public function InsertOrUpdate($data, $file, $url)
         {
             try{
-                if (isset($data['id'])) {
-                    if ($data['rason'] == 1) {
+                if (isset($data['idRespuesta'])) {
+                    if ($file == 1) {
                         $sql = "UPDATE $this->table SET
                             idCurso  = ?,
                             idModulo = ?,
@@ -108,21 +108,21 @@
                         WHERE idRespuesta = ?";
                     }
 
-                    if ($data['rason'] == 1) {
+                    if ($file == 1) {
                         $arrayData = array(
-                            $data['idc'],
-                            $data['idm'],
+                            $data['idCurso'],
+                            $data['idModulo'],
                             $data['nombre'],
                             $data['archivo'],
                             $data['link'],
-                            $data['id']
+                            $data['idRespuesta']
                         );
                     } else{
                         $arrayData = array(
-                            $data['idc'],
-                            $data['idm'],
+                            $data['idCurso'],
+                            $data['idModel'],
                             $data['nombre'],
-                            $data['id']
+                            $data['idRespuesta']
                         );
                     }
 

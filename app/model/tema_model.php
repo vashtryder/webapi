@@ -54,7 +54,6 @@
                 $this->response->setResponse(false,$e->getMessage());
             }
         }
-
         public function Get($id)
         {
             try{    
@@ -93,7 +92,7 @@
             try{
                 if (isset($data['idTema'])) {
                     
-                    if (!empty($file)) {
+                    if ($file != null) {
                         $sql = "UPDATE $this->table SET
                             idCurso  = ?,
                             idModulo = ?,
@@ -109,11 +108,11 @@
                         WHERE idTema = ?";
                     }
 
-                    if (!empty($file)) {
+                    if ($file != null) {
                         $arrayData =  array(
                             $data['idCurso'],
                             $data['idModulo'],
-                            $data['nombre'],
+                            $data['nombreTema'],
                             $file,
                             $url,
                             $data['idTema']
@@ -122,14 +121,14 @@
                         $arrayData = array(
                             $data['idCurso'],
                             $data['idModulo'],
-                            $data['nombre'],
+                            $data['nombreTema'],
                             $data['idTema']
                         );
                     };
 
                     $this->db->prepare($sql)
                         ->execute(
-                            array($arrayData)
+                            $arrayData
                     );
 
                 } else {

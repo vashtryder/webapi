@@ -139,7 +139,7 @@
                             array(
                                 $data['idCurso'],
                                 $data['idModulo'],
-                                $data['nombreExamen'],
+                                $data['nombre'],
                                 $file,
                                 $url
                             )

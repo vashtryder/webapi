@@ -47,22 +47,26 @@ $app->group('/server/tema/', function() {
 
         $data = $req->getParsedBody(); //retornará todo los valores que nos hayan enviado.
         $files = $req->getUploadedFiles();
-        $uploadedFile = $files['upfile'];
-        
-        if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
-            $directory = $this->get('upload_directory');
-            $uploadFileName = $uploadedFile->getClientFilename();
-            $filename = moveUploadedFile($directory, $uploadedFile);
 
-            if ($filename[0] == 0) {
-                $request = $filename[1];
-            } else {
-                $request = $um->InsertOrUpdate($data, $uploadFileName, $filename[2] );
-            }
+        if (empty($files['upfile'])) {
+            // throw new Exception('Expected a upfile');
+            $um->InsertOrUpdate($data, null, null );
+            $request = "El registro se actualizo correctamente.";
         } else {
-            $request = $um->InsertOrUpdate($data, '' , '' );
+            $uploadedFile = $files['upfile'];
+            if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
+                $directory = $this->get('upload_directory');
+                $uploadFileName = $uploadedFile->getClientFilename();
+                $filename = moveUploadedFile($directory, $uploadedFile);
+                if ($filename[0] == 0) {
+                    $request = $filename[1];
+                } else {
+                    $um->InsertOrUpdate($data, $uploadFileName, $filename[2]);
+                    $request = $filename[1];
+                }
+            }
         }
-        
+
         return $res
         ->withHeader('Content-type','application/json')
         ->getBody()
@@ -75,17 +79,86 @@ $app->group('/server/tema/', function() {
 
     $this->get('delete/{id}', function($req, $res, $args){
         $um = new TemaModel();
-    
+        $arrayData = (array) $um->Get($args['id']);
+        $directory = $this->get('upload_directory');
+        $filename = removeUploadedFile($directory, $arrayData);
+        
+        if ($filename[0] == 0) {
+            $request = $filename[1];
+        } else {
+            $um->Delete($args['id']);
+            $request = $filename[1];
+        }
+        
         return $res
         ->withHeader('Content-type', 'application/json')
         ->getBody()
         ->write(
             json_encode(
-                $um->Delete($args['id'])
+                $request
             )
         );
     });
 });
+
+function removeUploadedFile($directory, $data)
+{
+    $enviarDatos = []; // Errores se guardara en esta variable
+    $arrayExtensions = array('pdf','docx','doc','xls','xlsx','avi','mkv','mp4');
+    $suffixes        = array('', 'KB', 'MB', 'GB', 'TB');
+    $errors          = true;
+    $fileName        = empty($data['archivo']) ? null : $data['archivo'];
+    $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+    $uploadDirectory = array(
+        'pdf'  => DIRECTORY_SEPARATOR . 'pdf' . DIRECTORY_SEPARATOR,
+        'mp4'  => DIRECTORY_SEPARATOR . 'video' . DIRECTORY_SEPARATOR,
+        'mkv'  => DIRECTORY_SEPARATOR . 'video' . DIRECTORY_SEPARATOR,
+        'avi'  => DIRECTORY_SEPARATOR . 'video' . DIRECTORY_SEPARATOR,
+        'docx' => DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR,
+        'xlsx '=> DIRECTORY_SEPARATOR . 'doc' . DIRECTORY_SEPARATOR
+    );
+
+    switch ($fileExtension) {
+        case 'pdf':
+            $target_file = $directory . $uploadDirectory[$fileExtension] . $fileName;
+            $url_file = 'http://api.elearn.com/uploads/' . $fileExtension . '/' .  $fileName;
+            $errors = true;
+            break;
+        case 'avi':
+        case 'mkv':
+        case 'mp4':
+            $target_file = $directory . $uploadDirectory[$fileExtension] . $fileName;
+            $url_file = 'http://api.elearn.com/uploads/' . $fileExtension . '/' .  $fileName;
+            $errors = true;
+            break;
+        default:
+            $target_file = '';
+            $url_file = '';
+            $errors = false;
+            break;
+    }
+
+    if(empty($fileName)){
+        $enviarDatos = array(1,"El archivo no existe o ha sido borrado. Inténtalo de nuevo o contacta al administrador");
+        $errors = false;
+    }
+
+    if($errors){
+        @unlink($target_file);
+        // $uploadedFile->moveTo($target_file);
+        $enviarDatos = array(1,"El Archivo ". basename($fileName)." ha sido eliminado.");
+    } 
+
+    // $enviarDatos = array(
+    //     $errors,
+    //     $fileName,
+    //     $fileExtension,
+    //     $target_file,
+    //     $directory
+    // );
+
+    return $enviarDatos;
+}
 
 
 function moveUploadedFile($directory, UploadedFile $uploadedFile)
@@ -102,7 +175,6 @@ function moveUploadedFile($directory, UploadedFile $uploadedFile)
     $fileExtension = pathinfo($uploadedFile->getClientFilename(), PATHINFO_EXTENSION);
     $fileBase      = log($fileSize,1024);
     $fileWeight    = round(pow(1024, $fileBase - floor($fileBase)));
-    $enviarDatos   = $directory . DIRECTORY_SEPARATOR . $fileName;
 
     $uploadDirectory = array(
         'pdf'  => DIRECTORY_SEPARATOR . 'pdf' . DIRECTORY_SEPARATOR,
