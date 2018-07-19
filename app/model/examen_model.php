@@ -60,13 +60,27 @@
             try{    
                 $result = array();
 
-                $stm = $this->db->prepare("SELECT * FROM $this->table WHERE idexamen  = ? ");
+                $stm = $this->db->prepare("SELECT * FROM $this->table WHERE idExamen  = ? ");
                 $stm->execute(array($id));
 
                 $this->response->setResponse(true);
                 $this->response->result = $stm->fetch();
                 
                 return $this->response;
+
+            }catch(Exception $e){
+                $this->response->setResponse(false,$e->getMessage());
+            }
+        }
+
+        public function Set($id)
+        {
+            try{    
+                $result = array();
+
+                $stm = $this->db->prepare("SELECT * FROM $this->table WHERE idExamen  = ? ");
+                $stm->execute(array($id));
+                return  $stm->fetch();
 
             }catch(Exception $e){
                 $this->response->setResponse(false,$e->getMessage());
@@ -92,7 +106,7 @@
         {
             try{
                 if (isset($data['idExamen'])) {
-                    if ($file) {
+                    if ($file != null) {
                         $sql = "UPDATE $this->table SET
                             idCurso  = ?,
                             idModulo = ?,
@@ -108,7 +122,7 @@
                         WHERE idExamen = ?";
                     }
 
-                    if ($file) {
+                    if ($file != null) {
                         $arrayData =  array(
                             $data['idCurso'],
                             $data['idModulo'],
@@ -128,7 +142,7 @@
 
                     $this->db->prepare($sql)
                         ->execute(
-                            array($arrayData)
+                            $arrayData
                     );
 
                 } else {
@@ -139,7 +153,7 @@
                             array(
                                 $data['idCurso'],
                                 $data['idModulo'],
-                                $data['nombre'],
+                                $data['nombreExamen'],
                                 $file,
                                 $url
                             )

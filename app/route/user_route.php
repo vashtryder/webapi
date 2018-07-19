@@ -2,7 +2,7 @@
     use App\Model\UserModel;
 
     #-- Ruta: Perfil Usuario/Cliente
-    $app->group('/admin/user/', function() {
+    $app->group('/server/user/', function() {
         
         $this->get('Lista', function($req, $res, $args){
             $um = new UserModel();

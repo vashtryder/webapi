@@ -2,7 +2,7 @@
 use App\Model\RespuestaModel;
 
 #-- Ruta: Perfil Usuario/Cliente
-$app->group('/admin/respuesta/', function() {
+$app->group('/server/respuesta/', function() {
     
     $this->get('Lista', function($req, $res, $args){
         $um = new RespuestaModel();
@@ -75,9 +75,9 @@ $app->group('/admin/respuesta/', function() {
          );
     });
 
-    $this->post('delete/{id}', function($req, $res, $args){
+    $this->get('delete/{id}', function($req, $res, $args){
         $um = new RespuestaModel();
-        $arrayData = (array) $um->Get($args['id']);
+        $arrayData = (array) $um->Set($args['id']);
         $directory = $this->get('upload_directory');
         $filename = removeUploadedFile($directory, $arrayData);
 

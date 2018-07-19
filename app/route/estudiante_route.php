@@ -2,7 +2,7 @@
     use App\Model\EstudianteModel;
 
     #-- Ruta: Perfil Usuario/Cliente
-    $app->group('/estudiante/', function() {
+    $app->group('server/estudiante/', function() {
         
         $this->get('Lista', function($req, $res, $args){
             $um = new EstudianteModel();

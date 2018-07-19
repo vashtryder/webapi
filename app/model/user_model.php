@@ -8,7 +8,7 @@
     class UserModel
     {
         private $db;
-        private $table = 'tb_login';
+        private $table_login = 'tb_login';
         private $response;
         
         public function __CONSTRUCT()

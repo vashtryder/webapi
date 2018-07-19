@@ -45,6 +45,7 @@ $app->group('/server/examen/', function() {
 
     $this->post('save', function($req, $res){
         $um = new ExamenModel();
+
         $data = $req->getParsedBody(); //retornará todo los valores que nos hayan enviado.
         $files = $req->getUploadedFiles();
         
@@ -78,9 +79,9 @@ $app->group('/server/examen/', function() {
         
     });
 
-    $this->post('delete/{id}', function($req, $res, $args){
+    $this->get('delete/{id}', function($req, $res, $args){
         $um = new ExamenModel();
-        $arrayData = (array) $um->Get($args['id']);
+        $arrayData = (array) $um->Set($args['id']);
         $directory = $this->get('upload_directory');
         $filename = removeUploadedFile($directory, $arrayData);
         
@@ -96,7 +97,7 @@ $app->group('/server/examen/', function() {
         ->getBody()
         ->write(
             json_encode(
-                $um->Delete($args['id'])
+                $request
             )
         );
     });

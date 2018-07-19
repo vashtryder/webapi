@@ -73,6 +73,20 @@
             }
         }
 
+        public function Set($id)
+        {
+            try{    
+                $result = array();
+
+                $stm = $this->db->prepare("SELECT * FROM $this->table WHERE idRespuesta  = ? ");
+                $stm->execute(array($id));
+                return  $stm->fetch();
+
+            }catch(Exception $e){
+                $this->response->setResponse(false,$e->getMessage());
+            }
+        }
+
         public function Delete($id)
         {
             try 
@@ -92,7 +106,7 @@
         {
             try{
                 if (isset($data['idRespuesta'])) {
-                    if ($file == 1) {
+                    if ($file != null) {
                         $sql = "UPDATE $this->table SET
                             idCurso  = ?,
                             idModulo = ?,
@@ -108,42 +122,39 @@
                         WHERE idRespuesta = ?";
                     }
 
-                    if ($file == 1) {
+                    if ($file != null) {
                         $arrayData = array(
                             $data['idCurso'],
                             $data['idModulo'],
-                            $data['nombre'],
-                            $data['archivo'],
-                            $data['link'],
+                            $data['nombreRespuesta'],
+                            $file,
+                            $url,
                             $data['idRespuesta']
                         );
                     } else{
                         $arrayData = array(
                             $data['idCurso'],
-                            $data['idModel'],
-                            $data['nombre'],
+                            $data['idModulo'],
+                            $data['nombreRespuesta'],
                             $data['idRespuesta']
                         );
                     }
 
                     $this->db->prepare($sql)
                         ->execute(
-                            array(
-                                $arrayData
-                            )
+                            $arrayData
                         );
                 } else {
-                    $sql = "INSERT INTO $this->table (idRespuesta , idCurso, idModulo, nombre, archivo, link) 
-                    VALUES (?,?,?,?,?,?)";
+                    $sql = "INSERT INTO $this->table (idCurso, idModulo, nombre, archivo, link) 
+                    VALUES (?,?,?,?,?)";
                     $this->db->prepare($sql)
                         ->execute(
                             array(
-                                $data['ida'],
-                                $data['idc'],
-                                $data['idm'],
-                                $data['nombre'],
-                                $data['archivo'],
-                                $data['link']
+                                $data['idCurso'],
+                                $data['idModulo'],
+                                $data['nombreRespuesta'],
+                                $file,
+                                $url
                             )
                         );
                 }

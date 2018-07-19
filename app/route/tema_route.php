@@ -79,7 +79,7 @@ $app->group('/server/tema/', function() {
 
     $this->get('delete/{id}', function($req, $res, $args){
         $um = new TemaModel();
-        $arrayData = (array) $um->Get($args['id']);
+        $arrayData = (array) $um->Set($args['id']);
         $directory = $this->get('upload_directory');
         $filename = removeUploadedFile($directory, $arrayData);
         
@@ -105,8 +105,8 @@ function removeUploadedFile($directory, $data)
 {
     $enviarDatos = []; // Errores se guardara en esta variable
     $arrayExtensions = array('pdf','docx','doc','xls','xlsx','avi','mkv','mp4');
-    $suffixes        = array('', 'KB', 'MB', 'GB', 'TB');
     $errors          = true;
+    
     $fileName        = empty($data['archivo']) ? null : $data['archivo'];
     $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
     $uploadDirectory = array(
@@ -145,7 +145,6 @@ function removeUploadedFile($directory, $data)
 
     if($errors){
         @unlink($target_file);
-        // $uploadedFile->moveTo($target_file);
         $enviarDatos = array(1,"El Archivo ". basename($fileName)." ha sido eliminado.");
     } 
 
@@ -154,7 +153,8 @@ function removeUploadedFile($directory, $data)
     //     $fileName,
     //     $fileExtension,
     //     $target_file,
-    //     $directory
+    //     $directory,
+    //     $data
     // );
 
     return $enviarDatos;
